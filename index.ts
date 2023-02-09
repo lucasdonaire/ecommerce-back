@@ -1,25 +1,10 @@
-import { PrismaClient } from '@prisma/client'
-import hash from './crypto/hash'
+import express from "express";
+import routes from "./api/routes/index"
 
-const prisma = new PrismaClient()
+const app = express();
 
-async function main() {
-    const user = await prisma.client.create({
-        data: {
-          name: 'carlos',
-          email: 'carlos@email.com',
-          hash: hash('carlos')
-        },
-      })
-      console.log(user)
-}
+routes(app)
 
-main()
-  .then(async () => {
-    await prisma.$disconnect()
-  })
-  .catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-  })
+app.use(express.json());
+
+app.listen(3000, () => console.log("Server is running in port 3000 🚀"));
