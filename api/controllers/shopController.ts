@@ -1,5 +1,5 @@
 import { prisma } from "../prismaClient";
-import hash from "../../crypto/hash";
+import hash from "../../globals/hash";
 import { Request, Response } from "express";
 
 export class ShopController {
@@ -51,15 +51,6 @@ export class ShopController {
     try {
       const shop = await prisma.shop.delete({where: { id: Number(req.params.id) }});
       return res.status(200).json('Shop apagado');
-    } catch (e) {
-      return res.status(500).json(e);
-    }
-  }
-
-  static async metodo(req: Request, res: Response) {
-    try {
-      const ret = prisma.shop;
-      return res.status(200).json(ret);
     } catch (e) {
       return res.status(500).json(e);
     }

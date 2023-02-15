@@ -1,5 +1,5 @@
 import { prisma } from "../prismaClient";
-import hash from "../../crypto/hash";
+import hash from "../../globals/hash";
 import { Request, Response } from "express";
 
 export class ClientController {

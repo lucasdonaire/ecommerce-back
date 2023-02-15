@@ -54,14 +54,5 @@ export class ProductOrderController {
       return res.status(500).json(e);
     }
   }
-
-  static async metodo(req: Request, res: Response) {
-    try {
-      const ret = prisma.productOrder;
-      return res.status(200).json(ret);
-    } catch (e) {
-      return res.status(500).json(e);
-    }
-  }
-
+  
 }
