@@ -4,7 +4,7 @@ import client from "./clientRouter";
 import shop from "./shopRouter";
 import product from "./productRouter";
 import order from "./orderRouter";
-import orderProduct from "./orderProductRouter";
+import orderProduct from "./productOrderRouter";
 
 
 function routes(app: any) { // express app

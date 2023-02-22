@@ -4,16 +4,30 @@ import { Request, Response } from "express";
 export class ProductOrderController {
 
   static async createProductOrder(req: Request, res: Response) {
+    // (productId, orderId) are unique
     try {
       const newProductOrder = req.body;
-      const createdProductOrder = await prisma.productOrder.create({
-        data: {
+      const productOrderExists = await prisma.productOrder.findUnique({
+        where:{
+        productAndOrder:{
           productId: newProductOrder.productId,
-          orderId: newProductOrder.orderId,
-          amount: newProductOrder.amount,
-        },
-      });
-      return res.status(200).json(createdProductOrder);
+          orderId: newProductOrder.orderId
+        }
+      }});
+      if(productOrderExists){
+        const newAmount = productOrderExists.amount + newProductOrder.amount
+        const modifiedProductOrder = await prisma.productOrder.update({ where: { id: Number(productOrderExists.id) }, data: {amount: newAmount} })
+        return res.status(200).json(modifiedProductOrder)
+      } else {
+        const createdProductOrder = await prisma.productOrder.create({
+          data: {
+            productId: newProductOrder.productId,
+            orderId: newProductOrder.orderId,
+            amount: newProductOrder.amount,
+          },
+        });
+        return res.status(200).json(createdProductOrder);
+      }
     } catch (e) {
       return res.status(500).json(e);
     }
@@ -54,5 +68,14 @@ export class ProductOrderController {
       return res.status(500).json(e);
     }
   }
-  
+
+  static async getAllProductOrdersByOrderId(req: Request, res: Response) {
+    try {
+      const productOrders = await prisma.productOrder.findMany({where: { orderId: Number(req.params.orderId) }});
+      return res.status(200).json(productOrders);
+    } catch (e) {
+      return res.status(500).json(e);
+    }
+  }
+
 }
