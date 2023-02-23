@@ -15,7 +15,7 @@ export class ProductOrderController {
         }
       }});
       if(productOrderExists){
-        const newAmount = productOrderExists.amount + newProductOrder.amount
+        const newAmount = newProductOrder.amount
         const modifiedProductOrder = await prisma.productOrder.update({ where: { id: Number(productOrderExists.id) }, data: {amount: newAmount} })
         return res.status(200).json(modifiedProductOrder)
       } else {
