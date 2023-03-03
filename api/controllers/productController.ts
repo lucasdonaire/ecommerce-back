@@ -26,8 +26,9 @@ export class ProductController {
   static async updateProduct(req: Request, res: Response) {
     try {
       const updatedProduct = req.body;
-      const image = updatedProduct?.image ? await imageUrlToBlob(updatedProduct.image) : ''
-      updatedProduct.image = image;
+      if(updatedProduct?.image){
+        updatedProduct.image =  await imageUrlToBlob(updatedProduct.image)
+      }
       const product = await prisma.product.update({ where: { id: Number(req.params.id) }, data: updatedProduct });
       return res.status(200).json(product);
     } catch (e) {

@@ -30,7 +30,7 @@ model Product {
   id    Int     @id @default(autoincrement())
   name  String  @unique
   price Float 
-  image String? @db.LongText
+  image String @db.LongText
   shop  Shop  @relation(fields: [shopId], references: [id])
   shopId  Int
   stock Int

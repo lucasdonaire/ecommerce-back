@@ -40,8 +40,39 @@ export class ClientController {
 
   static async getClientById(req: Request, res: Response) {
     try {
-      const client = await prisma.client.findFirst({where: { id: Number(req.params.id) }});
+      const client = await prisma.client.findUnique({where: { id: Number(req.params.id) }});
       return res.status(200).json(client);
+    } catch (e) {
+      return res.status(500).json(e);
+    }
+  }
+
+  static async getClientByEmail(req: Request, res: Response) {
+    try {
+      const client = await prisma.client.findUnique({where: { email: req.params.email }});
+      if(client){
+        return res.status(200).json(client);
+      } else {
+        return res.status(404).json()
+      }
+    } catch (e) {
+      return res.status(500).json(e);
+    }
+  }
+
+  static async login(req: Request, res: Response) {
+    try {
+      const hashPass = hash(req.params.password)
+      const client = await prisma.client.findUnique({where: { email: req.params.email }});
+      if(client){
+        if(hashPass == client.hash){
+          return res.status(200).json(client.id);
+        } else {
+          return res.status(403).json('incorrect password')
+        }
+      } else {
+        return res.status(404).json({message:'email not found'})
+      }
     } catch (e) {
       return res.status(500).json(e);
     }

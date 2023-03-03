@@ -55,7 +55,7 @@ export class OrderController {
         }
         return res.status(200).json(activeOrder[0]);
       } else {
-        const createdOrder = await prisma.order.create({ data: { clientId: Number(req.body.clientId) }});
+        const createdOrder = await prisma.order.create({ data: { clientId: Number(req.params.clientId) }});
         return res.status(200).json(createdOrder);
       }
     } catch (e) {
